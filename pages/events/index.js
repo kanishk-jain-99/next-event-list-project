@@ -3,8 +3,7 @@ import EventList from "../../components/events/event-list";
 import EventsSearch from "../../components/events/events-search";
 import { getAllEvents } from "../../dummy-data";
 
-export default function AllEventsPage() {
-  const events = getAllEvents();
+export default function AllEventsPage({ events }) {
   const router = useRouter();
 
   function findEventsHandler(month, year) {
@@ -19,4 +18,13 @@ export default function AllEventsPage() {
       <EventList items={events} />
     </>
   );
+}
+
+export async function getStaticProps(context) {
+  const data = await getAllEvents();
+
+  return {
+    props: { events: data },
+    revalidate: 60,
+  };
 }
