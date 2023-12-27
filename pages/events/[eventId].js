@@ -3,6 +3,7 @@ import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 import ErrorAlert from "../../components/ui/error-alert";
 import { getEventById, getFeaturedEvents } from "../../helpers/api-utils";
+import Head from "next/head";
 
 export default function EventPage({ selectedEvent }) {
   if (!selectedEvent) {
@@ -14,6 +15,10 @@ export default function EventPage({ selectedEvent }) {
   }
   return (
     <>
+      <Head>
+        <title>{selectedEvent[0].title}</title>
+        <meta name="events" content="Greates Events Of All time" />
+      </Head>
       <EventSummary title={selectedEvent[0].title} />
       <EventLogistics
         date={selectedEvent[0].date}

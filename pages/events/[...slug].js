@@ -6,6 +6,7 @@ import ErrorAlert from "../../components/ui/error-alert";
 import { getFilteredEvents } from "../../helpers/api-utils";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 export default function FilteredEventPage() {
   const [loadedEvents, setLoadedEvents] = useState();
@@ -33,8 +34,20 @@ export default function FilteredEventPage() {
     }
   }, [data]);
 
+  const pageHeadData = (
+    <Head>
+      <title>Filtered Event Page</title>
+      <meta name="events" content="Greatest Events Of All time" />
+    </Head>
+  );
+
   if (!loadedEvents) {
-    return <p className="center">Loading...</p>;
+    return (
+      <>
+        {pageHeadData}
+        <p className="center">Loading...</p>
+      </>
+    );
   }
 
   const filteredYear = filterData[0];

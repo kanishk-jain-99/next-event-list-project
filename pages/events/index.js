@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import EventList from "../../components/events/event-list";
 import EventsSearch from "../../components/events/events-search";
 import { getAllEvents } from "../../dummy-data";
+import Head from "next/head";
 
 export default function AllEventsPage({ events }) {
   const router = useRouter();
@@ -14,6 +15,10 @@ export default function AllEventsPage({ events }) {
 
   return (
     <>
+      <Head>
+        <title>All Events</title>
+        <meta name="events" content="Greates Events Of All time" />
+      </Head>
       <EventsSearch onSearch={findEventsHandler} />
       <EventList items={events} />
     </>
