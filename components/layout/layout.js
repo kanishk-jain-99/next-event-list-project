@@ -1,10 +1,14 @@
-import MainHeader from "./main-header";
+import { Fragment } from 'react';
 
-export default function Layout({ children }) {
+import MainHeader from './main-header';
+
+function Layout(props) {
   return (
-    <>
+    <Fragment>
       <MainHeader />
-      <main>{children}</main>
-    </>
+      <main>{props.children}</main>
+    </Fragment>
   );
 }
+
+export default Layout;

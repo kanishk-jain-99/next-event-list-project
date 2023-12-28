@@ -1,14 +1,15 @@
+import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import useSWR from "swr";
+import Head from "next/head";
+
+import { getFilteredEvents } from "../../helpers/api-util";
 import EventList from "../../components/events/event-list";
 import ResultsTitle from "../../components/events/results-title";
 import Button from "../../components/ui/button";
 import ErrorAlert from "../../components/ui/error-alert";
-import { getFilteredEvents } from "../../helpers/api-utils";
-import useSWR from "swr";
-import { useEffect, useState } from "react";
-import Head from "next/head";
 
-export default function FilteredEventPage() {
+function FilteredEventsPage(props) {
   const [loadedEvents, setLoadedEvents] = useState();
   const router = useRouter();
 
@@ -34,19 +35,19 @@ export default function FilteredEventPage() {
     }
   }, [data]);
 
-  const pageHeadData = (
+  let pageHeadData = (
     <Head>
-      <title>Filtered Event Page</title>
-      <meta name="events" content="Greatest Events Of All time" />
+      <title>Filtered Events</title>
+      <meta name="description" content={`A list of filtered events.`} />
     </Head>
   );
 
   if (!loadedEvents) {
     return (
-      <>
+      <Fragment>
         {pageHeadData}
         <p className="center">Loading...</p>
-      </>
+      </Fragment>
     );
   }
 
@@ -55,6 +56,16 @@ export default function FilteredEventPage() {
 
   const numYear = +filteredYear;
   const numMonth = +filteredMonth;
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name="description"
+        content={`All events for ${numMonth}/${numYear}.`}
+      />
+    </Head>
+  );
 
   if (
     isNaN(numYear) ||
@@ -66,14 +77,15 @@ export default function FilteredEventPage() {
     error
   ) {
     return (
-      <>
+      <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid filter. Please adjust your values!</p>
         </ErrorAlert>
         <div className="center">
           <Button link="/events">Show All Events</Button>
         </div>
-      </>
+      </Fragment>
     );
   }
 
@@ -87,24 +99,26 @@ export default function FilteredEventPage() {
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
-      <>
+      <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>No events found for the chosen filter!</p>
         </ErrorAlert>
         <div className="center">
           <Button link="/events">Show All Events</Button>
         </div>
-      </>
+      </Fragment>
     );
   }
 
   const date = new Date(numYear, numMonth - 1);
 
   return (
-    <>
+    <Fragment>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
-    </>
+    </Fragment>
   );
 }
 
@@ -151,3 +165,5 @@ export default function FilteredEventPage() {
 //     },
 //   };
 // }
+
+export default FilteredEventsPage;
